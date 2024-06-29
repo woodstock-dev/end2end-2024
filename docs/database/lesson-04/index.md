@@ -45,9 +45,11 @@ So what are some steps we can can take to make this table better for our busines
 
 DDL
 ```sql
-ALTER TABLE customer ADD UNIQUE KEY uq_customer_email ON customer(email);
+ALTER TABLE customer ADD CONSTRAINT uq_customer_email UNIQUE(email);
 
-ALTER TABLE customer ADD UNIQUE KEY uq_customer ON customer(first_name, last_name, email);
+ALTER TABLE customer ADD CONSTRAINT uq_customer_id UNIQUE(first_name, last_name, email);
+
+ALTER TABLE customer DROP CONSTRAINT uq_customer_email
 ```
 
 These two simple statements fix the problems identified above.
@@ -60,7 +62,7 @@ and notice that the invoice table can accidently have multiple invoices.
 What columns on this table can be fixed to disallow dupliacte entries?
 
 ```sql
-ALTER TABLE invoice ADD UNIQUE KEY uq_invoice ON customer(customer_id, invoice_date);
+ALTER TABLE invoice ADD CONSTRAINT uq_invoice ON unique(customer_id, invoice_date);
 ```
 
 Now we can be sure that if our application does not handle double click correctly, we will not get duplicate invoices.
@@ -155,7 +157,7 @@ Rules:
 ## Homework
 
 Based on the work we've done above, create a customer review table
-that allows the customer to rate a track or an album they have
+that allows the customer to rate a track they have
 purchased on a scale of 1 to 5 and leave a short comment.
 
 > * What are the risks of this type of review?
